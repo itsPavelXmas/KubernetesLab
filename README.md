@@ -29,6 +29,7 @@ CMD [ "npm", "start"]
 
 * Izolare
 * Portabilitate
+* Scalabilitate și Management
 
 # Introducere in Kubernetes
 
