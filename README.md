@@ -110,7 +110,7 @@ spec:
         ports:
         - containerPort: 80
 ```
-#ConfigMaps și Secrets
+# ConfigMaps și Secrets
 Un ConfigMap este un obiect folosit pentru a stoca într-un format de tipul cheie-valoare date care nu sunt sensitive. Un pod poate consuma un ConfigMap ca o variabilă de mediu, ca un argument în linie de comandă sau ca un fișier de configurare într-un volum. Un astfel de obiect oferă opțiunea de a decupla configurația specifica unui mediu de imaginile de container și de codul aplicației, ceea ce sporește portabilitatea aplicațiilor.
 
 ```
@@ -159,7 +159,7 @@ kubectl get svc  # sa vedem service ul creat
 
 
 
-#Homework1
+# Homework1
 
 - 
 
