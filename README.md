@@ -110,11 +110,65 @@ spec:
         - containerPort: 80
 ```
 
-# DEMO aplicatie NodeJs
+Vom utiliza o aplicatie simpla cu rolul de containerizare
+
+app.js
+```
+const express = require('express')
+const app = express()
+const port = 3000
+
+app.get('/', (req, res) => {
+  res.send('Hello World!')
+})
+
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`)
+})
+```
+
+Dockerfile
+```
+FROM node:14-alpine3.16 
+
+WORKDIR /app 
+
+COPY . .
+
+RUN npm install
+
+CMD [ "npm", "start"]
+
+```
 
 
 
+Pentru Deployment-ul aplicatiei o sa adaugam un obiect Kubernetes de tip Service, care configurează modul în care traficul extern este direcționat către unul sau mai multe Pods rulând în cluster.
+```
+apiVersion: v1
+kind: Service
+metadata:  
+  name: my-nodeport-service
+spec:
+  selector:    
+    app: nginx
+  type: NodePort
+  ports:  
+  - name: http
+    port: 80
+    targetPort: 80
+    nodePort: 30036
+    protocol: TCP
 
+```
+Tipul de Service. `NodePort` este o configurație care permite accesul extern la Pods din cluster prin deschiderea unui port specific (nodePort) pe toate nodurile (mașinile fizice sau VM-urile) din cluster.
+
+Vom rula urmatoarele comenzi pentru a verifica procedura:
+```
+kubectl get pods # sa vedem instantele aplicatiei
+kubectl get svc  # sa vedem service ul creat
+
+```
 
 
 
