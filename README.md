@@ -37,5 +37,85 @@ Kubernetes (prescurtat K8s) este cel mai popular orchestrator, folosit la scara 
 Kubernetes simplifică sarcinile complexe de gestionare a aplicațiilor containerizate, oferind mecanisme robuste pentru implementare, întreținere și scalare.
 
 
-## **Concepte cheie Kubernetes**
+## **Arhitectura Kubernetes**
+Kubernetes este un sistem format din mai multe [Componente](https://kubernetes.io/docs/concepts/overview/components/#master-components)
+
+1. Kubectl - CLI pentru configurarea clusterului și managementului aplicațiilor. Asemănător cu comanda docker
+2. Node - nodul fizic din cadrul unui cluster
+3. Kubelet - agentul (daemon) de Kubernetes care rulează pe fiecare nod
+4. Control Plane - colecția de noduri care fac management la cluster. Include API Server, Scheduler, Controller Manager, CoreDNS, Etcd.
+
+## Instalare Kubernetes
+Cea mai buna metodă de a învăța este de a seta  local un cluster cu un singur nod de Kubernetes. Acest lucru se poate face în mai multe moduri:
+
+- [Minikube](https://kubernetes.io/docs/concepts/overview/components/#master-components](https://minikube.sigs.k8s.io/docs/start/))
+- [MicroK8s](https://microk8s.io)
+
+## Crearea si rularea unui Pod Kubernetes
+Putem crea și rula pod-uri în două maniere: imperativă (prin comenzi cu parametri) și declarativă (folosind fișiere de configurare).
+
+Dacă dorim să rulam un pod in mod declarativ, folosim următoarea comanda:`kubectl run <pod-name> –-image <image name>`.
+Pentru a testa daca o comanda ar fi executata cu success dar nu vrem sa cream resursa Kubernetes putem sa adaugam la final `--dry-run=client`.
+Mai multe informatii si exemple de folosire [aici](https://kubernetes.io/docs/concepts/workloads/pods/).
+
+Dacă dorim să afișăm toate pod-urile folosim comanda `kubectl get pods` și dacă dorim să listăm toate namespace-urile folosim `kubectl get namespaces`. De asemenea, având în vedere că un pod poate rula în cadrul unui namespace, putem să afișăm toate pod-urile din cadrul unui namespace: `kubectl get pods -n <namespace>`
+Daca dorim sa vedem informatii cu privire la pod-uri putem sa rulam comenzi precum:
+```
+kubectl exec -it mypod ls                     # Pentru a rula o comanda in interiorul unui pod (mypod trebuie sa existe deja in cluster) 
+kubectl logs <nume-pod>                       # afiseaza loguri
+kubectl delete pods/<nume-pod>                # sterge un pod
+
+```
+
+Un pod poate rula în cadrul unui namespace. Dacă dorim acest lucru, creăm mai întâi un namespace folosind comanda `kubectl create namespace <namespace-name>`. 
+
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.14.2
+    ports:
+    - containerPort: 80
+
+```
+Pentru a crea acest pod, folosim comanda apply și specificăm fișierul: `kubectl apply -f nginx.yaml`.
+
+### Obiecte in Kubernetes 
+Pentru a intelege cum obiectele Kubernetes sunt reprezentate in format .yaml se poate accessa [aici](https://kubernetes.io/docs/concepts/overview/working-with-objects/)
+
+# Deployments in Kubernetes
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  replicas: 2 # Spune Deployment-ului să ruleze 2 pod-uri care corespund template-ului
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.14.2
+        ports:
+        - containerPort: 80
+```
+
+# DEMO aplicatie NodeJs
+
+
+
+
+
+
+
 
