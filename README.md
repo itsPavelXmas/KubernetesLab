@@ -3,6 +3,7 @@
 # Containerizarea
 
 Containerizarea presupune plasarea unei componente software, a mediului, dependintelor si configuratiei sale, într-o unitate izolata numità container. Acest lucru face posibila implementarea unei aplicatii in mod consevent in orice mediu, fie on-premise sau bazat pe cloud.
+
 # Docker
 Instrument de containerizare care impacheteaza aplicatia si toate dependintele impreunã. Astfel, asa ne asiguram ca aplicatia noastra merge bine in orice mediu.
 
@@ -109,38 +110,23 @@ spec:
         ports:
         - containerPort: 80
 ```
-
-Vom utiliza o aplicatie simpla cu rolul de containerizare
-
-app.js
-```
-const express = require('express')
-const app = express()
-const port = 3000
-
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
-
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-})
-```
-
-Dockerfile
-```
-FROM node:14-alpine3.16 
-
-WORKDIR /app 
-
-COPY . .
-
-RUN npm install
-
-CMD [ "npm", "start"]
+#ConfigMaps și Secrets
+Un ConfigMap este un obiect folosit pentru a stoca într-un format de tipul cheie-valoare date care nu sunt sensitive. Un pod poate consuma un ConfigMap ca o variabilă de mediu, ca un argument în linie de comandă sau ca un fișier de configurare într-un volum. Un astfel de obiect oferă opțiunea de a decupla configurația specifica unui mediu de imaginile de container și de codul aplicației, ceea ce sporește portabilitatea aplicațiilor.
 
 ```
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: game-demo
+data:
+    # property-like keys; each key maps to a simple value
+    player_initial_lives: "3"
+```
 
+- Vom utiliza comanda `docker build -t numeImagine:TAG . ` pentru a construi imaginea aferenta aplicatiei.
+- Vom publica imaginea prin `docker push numeImagine:TAG `
+- O sa inlocuim in deployment `image: numeImagine:TAG`
+mai multe despre partea de Imagine si Docker [aici]()
 
 
 Pentru Deployment-ul aplicatiei o sa adaugam un obiect Kubernetes de tip Service, care configurează modul în care traficul extern este direcționat către unul sau mai multe Pods rulând în cluster.
@@ -169,6 +155,38 @@ kubectl get pods # sa vedem instantele aplicatiei
 kubectl get svc  # sa vedem service ul creat
 
 ```
+
+
+
+
+#Homework1
+
+- 
+
+app.js
+```
+const express = require('express')
+const app = express()
+const port = 3000
+
+app.get('/', (req, res) => {
+  res.send('Hello World!')
+})
+
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`)
+})
+```
+### Cerinte:
+- Pe baza app.js creati o imagine Dockerfile.
+- Porniti un container pe baza imaginii create
+- Creati un Deployment
+
+## Optional
+- Creati un pod separat pentru a rula o baza de date
+- Conectati-va la pod-ul cu baza de date si incercati sa rulati comenzi din terminal.
+  
+
 
 
 
